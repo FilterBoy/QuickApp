@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="MavenProjectsManager">
+    <option name="originalFiles">
+      <list>
+        <option value="$PROJECT_DIR$/callcenter-ui/pom.xml" />
+        <option value="$PROJECT_DIR$/server-component/pom.xml" />
+        <option value="$PROJECT_DIR$/callcenter-client/pom.xml" />
+        <option value="$USER_HOME$/codegen/swagger-codegen/samples/client/call_center_employee/try6/pom.xml" />
+        <option value="$PROJECT_DIR$/swagger-java-client/pom.xml" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="false" project-jdk-name="15" project-jdk-type="JavaSDK" />
+</project>

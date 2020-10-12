@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="server-component" />
+        <module name="swagger-java-client" />
+        <module name="callcenter-client" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="callcenter-client" target="14" />
+      <module name="rest_demo" target="11" />
+      <module name="server-component" target="11" />
+      <module name="swagger-java-client" target="1.7" />
+      <module name="swagger-java-client (1)" target="1.7" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="callcenter-client" options="-parameters" />
+      <module name="rest_demo" options="-parameters" />
+      <module name="server-component" options="-parameters" />
+    </option>
+  </component>
+</project>
