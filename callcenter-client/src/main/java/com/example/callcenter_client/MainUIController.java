@@ -1,10 +1,12 @@
 package com.example.callcenter_client;
 
-import io.swagger.client.ApiException;
-import io.swagger.client.api.AppointmentControllerApi;
-import io.swagger.client.api.SalesEmployeeControllerApi;
-import io.swagger.client.model.Appointment;
-import io.swagger.client.model.SalesEmployee;
+import io.swagger.Swagger2SpringBoot;
+import io.swagger.api.ApiException;
+import io.swagger.api.AppointmentsApiController;
+import io.swagger.configuration.SwaggerDocumentationConfig;
+import io.swagger.model.Appointment;
+import io.swagger.model.SalesEmployee;
+import io.swagger.api.SalesEmployeesApiController;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -15,6 +17,8 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -32,10 +36,11 @@ public class MainUIController {
 
     Map<SalesEmployee, CheckBox> salesEmployeeMap= new HashMap<>();
 
-    SalesEmployeeControllerApi salesEmployeeApi = new SalesEmployeeControllerApi();
-    AppointmentControllerApi appointmentApi = new AppointmentControllerApi();
+    SalesEmployeesApiController salesEmployeeApi;
+    AppointmentsApiController appointmentApi;
 
     private static final Logger log = LoggerFactory.getLogger(MainUIController.class);
+
 
     /* was required for publishing a StageReadyEvent [must MainUIController be annotated with @component to parse?]
     @Autowired
@@ -44,6 +49,9 @@ public class MainUIController {
 
     @FXML
     void initialize() throws ApiException {
+
+        ApplicationContext context = new AnnotationConfigApplicationContext(Swagger2SpringBoot.class);
+        salesEmployeeApi = context.getBean(SalesEmployeesApiController.class);
 
         populateSalesEmployeeList();
 
@@ -105,22 +113,22 @@ public class MainUIController {
 
             log.info("address: " + address + ", salesIds: " + salesEmployeeIds.toString());
 
-            try {
-                List<Appointment> appointments = appointmentApi.getProposalsUsingGET(address, salesEmployeeIds);
+            //try {
+                List<Appointment> appointments = appointmentApi.getProposalsUsingGET(address, salesEmployeeIds).getBody();
                 outputList.setItems(FXCollections.observableList(appointments));
-            } catch (ApiException e) {
+            /*} catch (ApiException e) {
                 System.out.println(e.getMessage());
-                System.out.println(e.getResponseBody());
+                //System.out.println(e.getResponseBody());
                 new Alert(Alert.AlertType.ERROR, "API exception: invalid parameters").show();
                 // we should parse the ApiException to see what went wrong!
                 // e.g: distinguish between java.net.ConnectException and "400/Bad Request" response from API
-            }
+            }*/
 
         });
     }
 
     private void populateSalesEmployeeList() throws ApiException {
-        List<SalesEmployee> salesEmployeeList = salesEmployeeApi.allUsingGET();
+        List<SalesEmployee> salesEmployeeList = salesEmployeeApi.allUsingGET().getBody();
         for (int i = 0; i < salesEmployeeList.size(); i++) {
             CheckBox cb = new CheckBox(salesEmployeeList.get(i).getName());
             salesEmployeeGrid.add(cb, i % 4, i / 4);

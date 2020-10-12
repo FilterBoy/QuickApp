@@ -1,9 +1,8 @@
 package com.example.callcenter_client;
 
-import io.swagger.client.ApiException;
-import io.swagger.client.ApiResponse;
-import io.swagger.client.api.AppointmentControllerApi;
-import io.swagger.client.model.Appointment;
+import io.swagger.api.ApiException;
+import io.swagger.api.AppointmentsApiController;
+import io.swagger.model.Appointment;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -11,6 +10,7 @@ import javafx.stage.Stage;
 import javafx.util.StringConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.LocalTime;
 import org.threeten.bp.OffsetDateTime;
@@ -28,7 +28,7 @@ public class CreateAppointmentUIController {
 
     Appointment proposal;
 
-    AppointmentControllerApi appointmentApi = new AppointmentControllerApi();
+    AppointmentsApiController appointmentApi;
 
     private static final Logger log = LoggerFactory.getLogger(MainUIController.class);
 
@@ -60,15 +60,18 @@ public class CreateAppointmentUIController {
             proposal.setBegin(begin);
             proposal.setEnd(begin.plusMinutes(Integer.parseInt(durationTextField.getText())));
 
-            try {
-                ApiResponse<Appointment> response = appointmentApi.newAppointmentUsingPOSTWithHttpInfo(proposal);
-                if (response.getStatusCode() == 200) {
+            //try {
+                ResponseEntity<Appointment> response = appointmentApi.newAppointmentUsingPOST(proposal);
+                if (response.getStatusCodeValue() == 200) {
                     new Alert(Alert.AlertType.CONFIRMATION, "Appointment Created!").show();
                     Stage stage = (Stage) okButton.getScene().getWindow();
                     stage.close();
                 }
-            } catch (ApiException e) {
-                String message;
+                else {
+                    log.error(response.getStatusCode().toString());
+                }
+            /*} catch (ApiException e) {
+                String message = e.getMessage();
                 if (e.getCode() == 0) {
                     message = "connection to server could not be established";
                 }
@@ -82,7 +85,7 @@ public class CreateAppointmentUIController {
                 }
                 new Alert(Alert.AlertType.ERROR, message).show();
 
-            }
+            }*/
 
         });
     }
